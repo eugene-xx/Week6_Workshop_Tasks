@@ -32,6 +32,7 @@ the data in the printed output is delimited using one whitespace character.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node
 {
@@ -44,7 +45,8 @@ void insert_node(struct node** treePtr, int data);
 void inOrder(struct node* treePtr);
 void delete_tree(struct node** treePtr);
 
-int main() {
+/**
+int main() { 
 	int temp = 0;
 	struct node* treePtr = NULL;
     printf("Enter the value of the new data member: ");
@@ -54,6 +56,29 @@ int main() {
         insert_node(&treePtr, temp);
         printf("Enter the value of the new data member: ");
         scanf("%d", &temp);            
+    }
+    printf("Initial version of binary tree:\n");
+    inOrder(treePtr);
+    printf("\n");
+    delete_tree(&(treePtr->rightPtr));
+    printf("Modified version of binary tree:\n");
+    inOrder(treePtr);
+    printf("\n");
+}
+**/
+
+int main(int argc, char* argv[]) { 
+	//int temp = 0;
+	struct node* treePtr = NULL;
+	char* tokenPtr = strtok(argv[1], ",");
+    //printf("Enter the value of the new data member: ");
+	//scanf("%d", &temp);
+    while (tokenPtr != NULL)
+    {
+        insert_node(&treePtr, atoi(tokenPtr));
+		tokenPtr = strtok(NULL, ",");
+        //printf("Enter the value of the new data member: ");
+        //scanf("%d", &temp);            
     }
     printf("Initial version of binary tree:\n");
     inOrder(treePtr);
@@ -97,9 +122,19 @@ void inOrder(struct node* treePtr)
 	}
 }
 
-void delete_tree(struct node** treePtr)
+//this function deals with deleting everything, dont hv to think how to only delete right side cz Q said when they input they'll input right side as arg into func so that only RHS is deleted
+void delete_tree(struct node** treePtr) 
+//OG:
+// 		free(*treePtr);
+//		delete_tree(&((*treePtr)->leftPtr));
+//		delete_tree(&((*treePtr)->rightPtr)); //indentation error
 {
-       free(*treePtr);
-	   delete_tree(&((*treePtr)->leftPtr));
-       delete_tree(&((*treePtr)->rightPtr));
+	if (*treePtr != NULL) //check if node exists
+	{
+		delete_tree(&((*treePtr)->leftPtr)); //look left
+		delete_tree(&((*treePtr)->rightPtr)); //look right
+		free(*treePtr); //visit
+		//after u deleted (free) a node, u need to assign a null to the pointer that was pointing to node u just deleted so that system knows
+		(*treePtr) = NULL; //inform tree ab node deletion	
+	}
 }

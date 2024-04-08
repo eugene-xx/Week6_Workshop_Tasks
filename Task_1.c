@@ -39,13 +39,15 @@ int main()
 
 void filter_ascending(char* string_1)
 {
-    for (int i = 1; i < strlen(string_1); i++)
+    for (int i = 1; i < strlen(string_1); i++) 
     {
-        for (int j = 0; string_1[j+2] != '\0'; j++)
+        for (int j = 0; string_1[j+1] != '\0'; j++) //OG: for (int j = 0; string_1[j+2] != '\0'; j++)
+        // j+2 just dont make sense, should check if next char is null or not
         {
             if (string_1[j] > string_1[j+1])
             {
-                for (int k = 0; string_1[k] != '\0'; k++)
+                for (int k = j+1; string_1[k] != '\0'; k++) //for (int k = 0; string_1[k] != '\0'; k++)
+                // k = j+1 so that j+1 is replaced by j+2 constantly which is k+1
                 {
                     string_1[k] = string_1[k+1];
                 }
